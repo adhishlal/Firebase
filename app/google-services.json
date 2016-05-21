@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "614578456306",
+    "firebase_url": "https://gdgfirechat.firebaseio.com",
+    "project_id": "gdgfirechat",
+    "storage_bucket": "gdgfirechat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:614578456306:android:aa2c78d33c8524c6",
+        "android_client_info": {
+          "package_name": "com.adhish.lal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "614578456306-ttpf5bk0hqtdbr0bjt0gat20dn6b8854.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNSs-YOU2DPx0vRo2UmoG5wn19tOWyTos"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
