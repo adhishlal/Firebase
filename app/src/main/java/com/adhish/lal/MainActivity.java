@@ -1,18 +1,23 @@
 package com.adhish.lal;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
@@ -28,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -46,12 +57,13 @@ public class MainActivity extends AppCompatActivity {
                     DatabaseReference myRef = database.getReference("login");
 
 
-                    Map<String, String> post2 = new HashMap<String, String>();
-                    post2.put("UID", user.getUid());
-                    post2.put("FID", FirebaseInstanceId.getInstance().getToken());
+                    Map<String, Object> updates = new HashMap<String, Object>();
+                    updates.put("UID", user.getUid());
+                    updates.put("FIB", FirebaseInstanceId.getInstance().getToken());
+                    myRef.push().setValue(updates);
 
 
-                    myRef.child("users").push().setValue(post2);
+
 
 
                 } else {
@@ -76,6 +88,42 @@ public class MainActivity extends AppCompatActivity {
                             Log.w(TAG, "signInAnonymously", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            // Read from the database
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            final DatabaseReference myRef = database.getReference("login");
+                            myRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    // This method is called once with the initial value and again
+                                    // whenever data at this location is updated.
+                                    myRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            // This method is called once with the initial value and again
+                                            // whenever data at this location is updated.
+//                                            String value = dataSnapshot.getValue(String.class);
+                                            Log.d(TAG, "Value is: " + dataSnapshot.getValue()+"");
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+
+                                    });
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+
+
+                            });
                         }
 
                         // ...
